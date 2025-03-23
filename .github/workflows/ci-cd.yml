@@ -166,8 +166,12 @@ jobs:
           REGISTRY: ghcr.io
         run: |
           # Define the new image with tag
-          NEW_IMAGE="${REGISTRY}/${GITHUB_REPOSITORY}:${IMAGE_TAG}"
-          
+          # old way to call the repo on argoCD
+          #NEW_IMAGE="${REGISTRY}/${GITHUB_REPOSITORY}:${IMAGE_TAG}"
+          # New way to call the repo on argoCD
+          NEW_IMAGE="${REGISTRY}/$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]'):${IMAGE_TAG}"
+
+
           # Update the deployment file directly
           sed -i "s|image: ${REGISTRY}/.*|image: ${NEW_IMAGE}|g" kubernetes/deployment.yaml
           
